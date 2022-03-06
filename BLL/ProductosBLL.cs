@@ -152,5 +152,21 @@ namespace Blazor.BLL
 
             return lista!;
         }
+
+        public List<ProductosDetalle> GetDetalles(Expression<Func<ProductosDetalle, bool>> criterio)
+        {
+            List<ProductosDetalle>? lista = new List<ProductosDetalle>();
+
+            try
+            {
+                lista = _contexto.ProductosDetalles?.Where(criterio).ToList();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return lista!;
+        }
     }
 }

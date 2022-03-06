@@ -20,7 +20,7 @@
 
             @* ProductoId *@
             <div>
-                <div class="input-group d-flex align-items-end">
+                <div class="input-group">
                     <label class="input-group-text"> Producto Id </label>
                     <InputNumber class="form-control col-4" @bind-Value="producto.ProductoId" />
                     <ValidationMessage For="@(() => producto.ProductoId)" />
@@ -34,8 +34,8 @@
             <div class="form-group">
 
                 <div class="input-group">
-                    <label class="input-group-text"> Descricion </label>
-                    <InputText class="form-control" @bind-Value="producto.Descripcion" />
+                    <label class="input-group-text"> Descrición </label>
+                    <InputText class="form-control" @bind-Value="producto.Descripcion" placeholder="Descripción, nombre producto" />
                     <ValidationMessage For="@(() =>producto.Descripcion)" />
                 </div>
 
@@ -89,38 +89,60 @@
 
                 <div class="input-group">
                     <label class="input-group-text"> Ganancia </label>
-                    <InputNumber class="form-control col-4" @bind-Value="producto.Ganancia" @onchange="GananciaChanged" />
+                    <InputNumber readonly class="form-control col-4" @bind-Value="producto.Ganancia" @onchange="GananciaChanged" />
                     <label class="input-group-text" > % </label>
                     <ValidationMessage For="@(() => producto.Ganancia)" />
                 </div>
 
             </div>
+
+            @* Fecha de Caducidad *@
+            <div Class="form-group">
+                <div class="input-group">
+                    <span class="input-group-text"> Fecha de Caducidad </span>
+                    <input type="date" @bind-value="producto.FechaDeCaducidad" />
+                    <ValidationMessage For="@(() => producto.FechaDeCaducidad)" />
+                </div>
+            </div>
             
         </div>
 
         @* PRODUCTO DETALLE *@
-            <div class="card align-items-center" style="box-shadow: 8px 8px rgba(0, 0, 0, 0.26);">
+            <div class="card align-items-center">
 
                 <div class="card-header align-items-center">
-                    <h3>Presentaciones del producto</h3>
+                    <h3> Presentaciones del producto </h3>
                 </div>
 
                 <div class="card-body">
 
                     <div class="form-row align-items-center">
+
                         <div class="col">
+
                             <div class="form-group" style="margin: 5px;">
-
-                                <label style="margin: 2px 20px 2px 5px;">Descripción</label>
-                                <label style="margin: 2px 0px 2px 86px;">Cantidad</label>
-                                <label style="margin: 2px 60px 2px 120px;">Precio</label>
-
+                                
                                 <div class="input-group">
-                                    <InputText class="form-control" @bind-Value="Presentacion" placeholder="Descripción del detalle" />
+                                    
+                                    <div class="form-group">
+                                        <label> Descripción </label>
+                                        <InputText class="form-control" @bind-Value="Descripcion" placeholder="Descripción del detalle" />
+                                    </div>
 
-                                    <InputNumber class="form-control" @bind-Value="Cantidad" />
+                                    <div class="form-group">
+                                        <label> Presentación </label>
+                                        <InputText class="form-control" @bind-Value="Presentacion" placeholder="Tipo de empaquetación" />
+                                    </div>
 
-                                    <InputNumber class="form-control" @bind-Value="Precio" />
+                                    <div class="form-group">
+                                        <label> Cantidad </label>
+                                        <InputNumber class="form-control" @bind-Value="Cantidad" />
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label> Precio </label>
+                                        <InputNumber class="form-control" @bind-Value="Precio" />
+                                    </div>
 
                                     <button type="button" class="btn btn-lg btn-primary" @onclick="AgregarDetalle"> Agregar </button>
                                 </div>
@@ -131,18 +153,24 @@
                     <table class="table table-light">
                         <thead class="thead">
                             <tr class="table">
+                                <th>DetalleId</th>
                                 <th>|Descripción</th>
+                                <th>|Presentación</th>
                                 <th>|Cantidad</th>
                                 <th>|Precio</th>
+                                <th>|Existencia de empaquetación</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var item in producto.ProductosDetalle)
                             {
                                 <tr>
+                                    <td>@item.DetallesId</td>
                                     <td>@item.DescripcionDetalle</td>
+                                    <td>@item.Presentacion</td>
                                     <td>@item.Cantidad</td>
                                     <td>RD$@item.Precio</td>
+                                    <td>@item.Empaque</td>
 
                                     <td><span class="btn btn-sm btn-outline-primary oi oi-ban" href="#"  @onclick="@(() => RemoverFila(item))"> Remover</span> </td>
                                 </tr>
@@ -173,11 +201,15 @@
     [Parameter]
     public int ProductoId { get; set; }
 
+    public string? Descripcion { get; set; }
+
     public string? Presentacion { get; set; }
     
     public int Cantidad { get; set; }
 
     public double Precio { get; set; }
+    
+    public int Empaque { get; set; }
 
     public Productos producto { get; set; } = new Productos();
 
@@ -210,7 +242,8 @@
 
     private void AgregarDetalle()
     {
-        this.producto.ProductosDetalle.Add(new ProductosDetalle(Presentacion, Cantidad, Precio));
+        ExistenciaEmpaquetadoCalcular();
+        this.producto.ProductosDetalle.Add(new ProductosDetalle(Descripcion, Presentacion, Cantidad, Precio, Empaque));
 
     }
 
@@ -270,5 +303,10 @@
     public void PrecioOrCostoChanged()
     {
         producto.Ganancia = (int)((producto.Precio - producto.Costo) / producto.Costo) * 100;
+    }
+
+    public void ExistenciaEmpaquetadoCalcular()
+    {
+        this.Empaque = producto.Existencia / Cantidad;
     }
 }

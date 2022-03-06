@@ -16,9 +16,6 @@ namespace Blazor.Entidades
         [Required(ErrorMessage = "Es obligatorio introducir la descripción")]
         public string? Descripcion { get; set; }
 
-        [Required(ErrorMessage = "Es obligatorio introducir el tipo de presentacion presentacion")]
-        public string? Presentacion { get; set; }
-
         [Required(ErrorMessage = "Es obligatorio introducir la existencia")]
         [Range(1, int.MaxValue, ErrorMessage = "La Id esta fuera del rango permitido")]
         public int Existencia { get; set; }
@@ -34,6 +31,8 @@ namespace Blazor.Entidades
         public int Ganancia { get; set; }
 
         public double ValorInventario { get; set; }
+
+        public DateTime FechaDeCaducidad { get; set; }
 
         [ForeignKey("ProductoId")]
         public virtual List<ProductosDetalle>? ProductosDetalle { get; set; } = new List<ProductosDetalle>();

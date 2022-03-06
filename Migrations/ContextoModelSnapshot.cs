@@ -33,15 +33,14 @@ namespace Blazor.Migrations
                     b.Property<int>("Existencia")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime>("FechaDeCaducidad")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("Ganancia")
                         .HasColumnType("INTEGER");
 
                     b.Property<double>("Precio")
                         .HasColumnType("REAL");
-
-                    b.Property<string>("Presentacion")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
 
                     b.Property<double>("ValorInventario")
                         .HasColumnType("REAL");
@@ -63,8 +62,14 @@ namespace Blazor.Migrations
                     b.Property<string>("DescripcionDetalle")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Empaque")
+                        .HasColumnType("INTEGER");
+
                     b.Property<double>("Precio")
                         .HasColumnType("REAL");
+
+                    b.Property<string>("Presentacion")
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("ProductoId")
                         .HasColumnType("INTEGER");
@@ -76,7 +81,7 @@ namespace Blazor.Migrations
 
                     b.HasIndex("ProductoId");
 
-                    b.ToTable("ProductosDetalle");
+                    b.ToTable("ProductosDetalles");
                 });
 
             modelBuilder.Entity("Blazor.Entidades.ProductosDetalle", b =>

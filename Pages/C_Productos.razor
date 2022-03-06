@@ -16,8 +16,9 @@
                 <div class="input-group d-flex align-items-end">
 
                     <InputSelect class="form-control col-2" @bind-Value="filtro">
-                        <option value="1">ID</option>
-                        <option value="2">Descripcion</option>
+                        <option value="1">ProductoId</option>
+                        <option value="2">Descripción</option>
+                        <option value="3">Fecha de Caducidad</option>
                     </InputSelect>
 
                     <div class = "flex-fill mx-2">
@@ -40,13 +41,14 @@
             <thead class="thead">
                 <tr class="table">
 
-                    <th>ID</th>
+                    <th>ProductoId</th>
                     <th>|Descripción</th>
                     <th>|Existencia</th>
                     <th>|Costo</th>
                     <th>|Valor Inventario</th>
                     <th>|Precio</th>
                     <th>|Ganancia</th>
+                    <th>|Fecha de Caducidad</th>
 
                 </tr>
             </thead>
@@ -62,6 +64,7 @@
                         <td>RD$@item.ValorInventario</td>
                         <td>RD$@item.Precio</td>
                         <td>@item.Ganancia%</td>
+                        <td>@item.FechaDeCaducidad</td>
                         <td><a class="btn btn-sm btn-outline-primary oi oi-eye" href="R_productos/@item.ProductoId"> Ver </a></td>
                     </tr>
                 }
@@ -95,6 +98,9 @@
                     break;
                 case "2":
                     producto = productosBLL.GetList(e => e.Descripcion.ToLower().Contains(Criterio.ToLower()));
+                    break;
+                case "3":
+                    producto = productosBLL.GetList(e => e.FechaDeCaducidad.ToString().Contains(Criterio));
                     break;
             }
         }
